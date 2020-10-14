@@ -1,8 +1,7 @@
 git init
 git checkout -b sperimentale
 git add -A
-read -e -p "Testo del commit?: " i "Push" testoCommit
-git commit -m $testoCommit
+git commit -m "Push"
 git remote add origin https://github.com/snsluca/STM.git
 git remote -v
 git push -u origin sperimentale
