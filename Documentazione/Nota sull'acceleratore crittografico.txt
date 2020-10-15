@@ -1,0 +1,20 @@
+NOTA SULL'ACCELERATORE CRITTOGRAFICO
+CRYPT: https://en.wikipedia.org/wiki/Crypt_(C)
+
+Cryptographic acceleration (CRYP and HASH)
+The devices embed a cryptographic processor that supports the advanced cryptographic
+algorithms usually required to ensure confidentiality, authentication, data integrity and nonrepudiation when exchanging messages with a peer:
+
+• Encryption/Decryption
+	– DES/TDES (data encryption standard/triple data encryption standard): ECB
+	(electronic codebook) and CBC (cipher block chaining) chaining algorithms, 64-,
+	128- or 192-bit key
+	
+	– AES (advanced encryption standard): ECB, CBC, GCM, CCM, and CTR (Counter
+	mode) chaining algorithms, 128, 192 or 256-bit key
+• Universal HASH
+	– SHA-1 and SHA-2 (secure HASH algorithms)
+	– MD5
+	– HMAC
+	
+The cryptographic accelerator supports DMA request generation.

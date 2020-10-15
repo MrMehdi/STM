@@ -1,0 +1,7 @@
+Siti delle toolchain:
+(Pagamento) IAR: https://www.iar.com/iar-embedded-workbench/
+Keil: https://www.keil.com/
+STM32CubeIDE: https://www.st.com/en/development-tools/stm32cubeide.html	
+
+
+Datasheet del microprocessore: https://www.st.com/en/microcontrollers-microprocessors/stm32h743-753.html
