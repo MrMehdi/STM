@@ -38,20 +38,8 @@ void MainTask(void) {
   GUI_Clear();
   GUI_SetColor(GUI_WHITE);
   GUI_SetFont(&GUI_Font32_1);
-  GUI_DispStringAt("Hello world!", (LCD_GetXSize()-100)/2, (LCD_GetYSize()-20)/2);
+  GUI_DispStringAt("Hello world!", (LCD_GetXSize()-100)/2, (LCD_GetYSize()-20)/2); 
   while(1) {};
-}
-
-int var=0;
-void disegnaCerchio(void) {
-  GUI_SetLayerVisEx (1, 0);
-  GUI_SetBkColor(GUI_BLACK);
-  GUI_Clear();
-  GUI_SetColor(GUI_WHITE);
-  GUI_SetFont(&GUI_Font32_1);
-  var++;
-  GUI_DrawCircle((LCD_GetXSize()-100)/2, (LCD_GetYSize()-20), var);
-
 }
 
 /*************************** End of file ****************************/

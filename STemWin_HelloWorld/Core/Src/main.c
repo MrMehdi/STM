@@ -73,7 +73,7 @@ int main(void)
   GUI_Init();  
     
   /* Run the HelloWorld erxample */
-  //MainTask();
+  MainTask();
   
   /* Infinite loop */
   for(;;);
