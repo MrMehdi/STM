@@ -1,0 +1,4 @@
+Low-power universal asynchronous receiver transmitter
+(LPUART)
+The device embeds one Low-Power UART (LPUART1). The LPUART supports asynchronous serial communication with minimum power consumption. It supports half duplex single wire communication and modem operations (CTS/RTS). It allows multiprocessor communication.
+The LPUARTs embed a Transmit FIFO (TXFIFO) and a Receive FIFO (RXFIFO). FIFO mode is enabled by software and is disabled by default.

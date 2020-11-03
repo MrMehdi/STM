@@ -1,0 +1,24 @@
+Siti delle toolchain:
+(Pagamento) IAR: https://www.iar.com/iar-embedded-workbench/
+Keil: https://www.keil.com/
+STM32CubeIDE: https://www.st.com/en/development-tools/stm32cubeide.html	
+
+
+Datasheet del microprocessore: https://www.st.com/en/microcontrollers-microprocessors/stm32h743-753.html
+
+Training per le schede
+https://www.st.com/content/st_com/en/support/learning/stm32-education/stm32-online-training/stm32h7-online-training.html
+
+
+Progetto template:
+File>new>STM 32 Project>Example selector>(selezionare scheda STM32H7)>(In name inserire "Template")
+Progetto paint:
+File>new>STM 32 Project>Example selector>(selezionare scheda STM32H7)>(In keyword inserire "LTCD") Selezionare solo i progetti compatibili STM32H743I-EVAL
+Progetto stemWin:
+File>new>STM 32 Project>Example selector>(In keyword inserire "stemWin") Selezionare solo i progetti compatibili STM32H743I-EVAL
+
+
+ATTENZIONE:
+STM32H743I-EVAL secondo la documentazione è equivalente a livello software a STM32H753I-EVAL
+
+Montano rispettivamente le MCU STM32H743XI eSTM32H753XI 

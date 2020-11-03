@@ -1,0 +1,13 @@
+LCDConf_stm32h743i_eval.c:598:13:DMA2D_CopyBuffer	12	static
+LCDConf_stm32h743i_eval.c:731:13:CUSTOM_CopyRect	24	static
+LCDConf_stm32h743i_eval.c:750:13:CUSTOM_FillRect	32	static
+LCDConf_stm32h743i_eval.c:710:13:CUSTOM_CopyBuffer	40	static
+LCDConf_stm32h743i_eval.c:171:6:HAL_DMA2D_MspInit	8	static
+LCDConf_stm32h743i_eval.c:184:6:HAL_DMA2D_MspDeInit	0	static
+LCDConf_stm32h743i_eval.c:201:6:HAL_LTDC_MspInit	56	static
+LCDConf_stm32h743i_eval.c:257:6:HAL_LTDC_MspDeInit	0	static
+LCDConf_stm32h743i_eval.c:273:6:HAL_LTDC_LineEventCallback	16	static
+LCDConf_stm32h743i_eval.c:309:6:LCD_X_Config	24	static
+LCDConf_stm32h743i_eval.c:394:5:LCD_X_DisplayDriver	72	static
+LCDConf_stm32h743i_eval.c:691:6:CUSTOM_DrawBitmap16bpp	32	static
+LCDConf_stm32h743i_eval.c:783:6:CUSTOM_DrawBitmap32bpp	32	static
