@@ -1,0 +1,6 @@
+funzioni_personali_disegno.c:60:7:pulisci_schermo	8	static
+funzioni_personali_disegno.c:67:6:disegna_cerchio_centrale	24	static
+funzioni_personali_disegno.c:77:6:disegna_indicatore_cerchio	40	static
+funzioni_personali_disegno.c:82:6:disegna_frame_barra_laterale	24	static
+funzioni_personali_disegno.c:88:6:disegna_contenuto_barra_laterale	4	static
+funzioni_personali_disegno.c:98:6:disegna_pulsante_controllo	24	static

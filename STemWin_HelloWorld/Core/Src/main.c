@@ -20,6 +20,39 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "WM.h"
+#include "funzioni_personali_disegno.h"
+
+/* JNS Struttura che contiene tutte le informazioni sull'interfaccia, come dimensioni eccetera.*/
+typedef struct
+{
+	/*Variabile che controlla lo spessore del bordo delle figure.*/
+	uint32_t spessore_bordo;
+
+	/*Variabili relative al cerchio centrale.*/
+	uint32_t raggio_cerchio_centrale;
+	uint32_t centro_x_cerchio_centrale;
+	uint32_t centro_y_cerchio_centrale;
+
+	/*Variabili relative all'indicatore del cerchio.*/
+	uint32_t raggio_indicatore_cerchio;
+	double angolo;
+
+	/*Variabili relative ai rettangoli laterali.*/
+	uint32_t dim_barra_x;
+	uint32_t dim_barra_y;
+	uint32_t pan_barra_destra;
+	uint32_t pan_barra_alto;
+
+	/*Variabili relative ai pulsanti di controllo.*/
+	uint32_t dim_quadrato_piu_meno;
+	uint32_t dim_riquadro_etichetta_x;
+	uint32_t dim_riquadro_etichetta_y;
+}struttura_d_int;
+
+struttura_d_int d_int;
+
+/*Contengono le variabili di dimensione dello schermo*/
+uint32_t x_size =0, y_size=0;
 
 /** @addtogroup STM32H7xx_HAL_Applications
   * @{
@@ -66,17 +99,48 @@ int main(void)
   
   /* Initializes the SDRAM device */
   BSP_SDRAM_Init(0);  
-  
+
+  x_size=LCD_GetXSize();
+  y_size=LCD_GetYSize();
+
   /* Init the STemWin GUI Library */  
   __HAL_RCC_CRC_CLK_ENABLE(); /* Enable the CRC Module */
   
   GUI_Init();  
     
   /* Run the HelloWorld erxample */
-  MainTask();
-  
+  //MainTask();
+
+  /*Variabile che controlla lo spessore del bordo delle figure.*/
+  	  d_int.spessore_bordo = 5;
+
+  		/*Variabili relative al cerchio centrale.*/
+  	  d_int.raggio_cerchio_centrale = (y_size/4);
+  	  d_int.centro_x_cerchio_centrale = (x_size/2);
+  	  d_int.centro_y_cerchio_centrale = (y_size/2);
+
+  		/*Variabili relative all'indicatore del cerchio.*/
+  	  d_int.raggio_indicatore_cerchio = 5;
+  	  d_int.angolo = (2*M_PI)/3;
+
+  		/*Variabili relative ai rettangoli laterali.*/
+  	  d_int.dim_barra_x = (x_size/8);
+  	  d_int.dim_barra_y =  2*(y_size/3);
+  	  d_int.pan_barra_destra = ((x_size/3)-d_int.dim_barra_x)/2;
+  	  d_int.pan_barra_alto = (y_size-d_int.dim_barra_y)/2;
+
+  		/*Variabili relative ai pulsanti di controllo.*/
+  	  d_int.dim_quadrato_piu_meno=(x_size/16);
+  	  d_int.dim_riquadro_etichetta_x=(x_size/8);
+  	  d_int.dim_riquadro_etichetta_y=d_int.dim_quadrato_piu_meno;
+
+  	  pulisci_schermo();
+  	  disegna_cerchio_centrale(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.raggio_cerchio_centrale, d_int.spessore_bordo);
+
   /* Infinite loop */
-  for(;;);
+  for(;;)
+	{
+	  	}
 }
 
 /**
