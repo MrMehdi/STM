@@ -55,7 +55,8 @@ Application/User/Core/main.o: \
  ../../../Core/Inc/is42s32800g_conf.h \
  ../../../Middlewares/ST/STemWin/inc/WM.h \
  ../../../Middlewares/ST/STemWin/inc/WM_GUI.h \
- ../../../Middlewares/ST/STemWin/inc/GUI.h
+ ../../../Middlewares/ST/STemWin/inc/GUI.h \
+ C:/Users/Computer/STM32CubeIDE/workspace_1.4.0/STemWin_HelloWorld/SW4STM32/STM32H743I_EVAL/File\ Personali/funzioni_personali_disegno.h
 
 ../../../Core/Inc/main.h:
 
@@ -168,3 +169,5 @@ Application/User/Core/main.o: \
 ../../../Middlewares/ST/STemWin/inc/WM_GUI.h:
 
 ../../../Middlewares/ST/STemWin/inc/GUI.h:
+
+C:/Users/Computer/STM32CubeIDE/workspace_1.4.0/STemWin_HelloWorld/SW4STM32/STM32H743I_EVAL/File\ Personali/funzioni_personali_disegno.h:

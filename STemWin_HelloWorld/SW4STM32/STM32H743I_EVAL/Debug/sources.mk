@@ -26,6 +26,7 @@ Drivers/BSP/Components \
 Drivers/BSP/STM32H743I_EVAL \
 Drivers/CMSIS \
 Drivers/STM32H7xx_HAL_Driver \
+File\ Personali \
 Middlewares/OS \
 Middlewares/Target \
 

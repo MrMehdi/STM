@@ -9,7 +9,7 @@
 #define APPLICATION_USER_CORE_FUNZIONI_PERSONALI_DISEGNO_H_
 
 void pulisci_schermo(void);
-void disegna_cerchio_centrale(uint32_t pos_x, uint32_t pos_y, uint32_t raggio, uint32_t spessore_bordo);
+void disegna_cerchio_centrale(int pos_x, int pos_y, int raggio, int spessore_bordo);
 
 
 #endif /* APPLICATION_USER_CORE_FUNZIONI_PERSONALI_DISEGNO_H_ */

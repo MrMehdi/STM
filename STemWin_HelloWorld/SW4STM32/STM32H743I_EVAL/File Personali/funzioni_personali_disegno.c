@@ -64,28 +64,28 @@ void MainTask(void) {
 }
 
 /*ATTENZIONE! LO (0,0) è in alto a sx*/
-void disegna_cerchio_centrale(uint32_t pos_x, uint32_t pos_y, uint32_t raggio, uint32_t spessore_bordo)
+void disegna_cerchio_centrale(int pos_x, int pos_y, int raggio, int spessore_bordo)
 {
 	//UTIL_LCD_FillRect(pos_x-raggio-d_int.raggio_indicatore_cerchio, pos_y-raggio-d_int.raggio_indicatore_cerchio, raggio*2+d_int.raggio_indicatore_cerchio, raggio*2+d_int.raggio_indicatore_cerchio, COLORE_SFONDO);
 
-	GUI_SetBkColor(GUI_GREEN);
+	GUI_SetColor(GUI_GREEN);
 	GUI_FillCircle(pos_x, pos_y, raggio);
-	GUI_SetBkColor(COLORE_SFONDO);
+	GUI_SetColor(COLORE_SFONDO);
 	GUI_FillCircle(pos_x, pos_y, raggio-spessore_bordo);
 }
 
-void disegna_indicatore_cerchio(uint32_t pos_x, uint32_t pos_y, double alfa, uint32_t raggio_dal_centro, uint32_t raggio_dimensione_indicatore)
+void disegna_indicatore_cerchio(int pos_x, int pos_y, double alfa, int raggio_dal_centro, int raggio_dimensione_indicatore)
 {
   GUI_FillCircle(pos_x+raggio_dal_centro*cos(alfa), pos_y+raggio_dal_centro*(-sin(alfa)), raggio_dimensione_indicatore);
 }
 
-void disegna_frame_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y, uint32_t spessore_bordo)
+void disegna_frame_barra_laterale(int pos_x, int pos_y, int dim_x, int dim_y, int spessore_bordo)
 {
 	GUI_FillRect(pos_x, pos_y, dim_x, dim_y);
 	GUI_FillRect(pos_x+spessore_bordo, pos_y+spessore_bordo, dim_x-2*spessore_bordo, dim_y-2*spessore_bordo);
 }
 
-void disegna_contenuto_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y, uint32_t spessore_bordo, double percentuale)
+void disegna_contenuto_barra_laterale(int pos_x, int pos_y, int dim_x, int dim_y, int spessore_bordo, double percentuale)
 {
 	//UTIL_LCD_FillRect(pos_x+spessore_bordo, pos_y+spessore_bordo, dim_x-2*spessore_bordo, dim_y*percentuale-0.5*spessore_bordo, UTIL_LCD_COLOR_YELLOW);
 	//UTIL_LCD_FillRect(pos_x+spessore_bordo, pos_y+dim_y*percentuale+0.5*spessore_bordo, dim_x-2*spessore_bordo, dim_y*(1.0-percentuale)-1.5*spessore_bordo, UTIL_LCD_COLOR_RED);
@@ -95,7 +95,7 @@ void disegna_contenuto_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t d
 	//UTIL_LCD_FillRect(pos_x+spessore_bordo, pos_y+dim_y*percentuale+spessore_bordo, dim_x-2*spessore_bordo, dim_y*(1.0-percentuale)-*spessore_bordo, UTIL_LCD_COLOR_RED);
 }
 
-void disegna_pulsante_controllo(uint32_t pos_x, uint32_t pos_y, uint32_t dim_quadrato, uint32_t dim_riquadro_etichetta_x, uint32_t dim_riquadro_etichetta_y)
+void disegna_pulsante_controllo(int pos_x, int pos_y, int dim_quadrato, int dim_riquadro_etichetta_x, int dim_riquadro_etichetta_y)
 {
 	//TODO: ottimizzare
 /*

@@ -10,6 +10,7 @@ RM := rm -rf
 -include sources.mk
 -include Middlewares/Target/subdir.mk
 -include Middlewares/OS/subdir.mk
+-include File\ Personali/subdir.mk
 -include Drivers/STM32H7xx_HAL_Driver/subdir.mk
 -include Drivers/CMSIS/subdir.mk
 -include Drivers/BSP/STM32H743I_EVAL/subdir.mk
