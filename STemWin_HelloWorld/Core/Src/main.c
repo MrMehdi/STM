@@ -22,6 +22,7 @@
 #include "WM.h"
 #include "funzioni_personali_disegno.h"
 
+
 /* JNS Struttura che contiene tutte le informazioni sull'interfaccia, come dimensioni eccetera.*/
 typedef struct
 {
@@ -53,6 +54,7 @@ struttura_d_int d_int;
 
 /*Contengono le variabili di dimensione dello schermo*/
 int x_size =0, y_size=0;
+TS_Init_t hTS;
 
 /** @addtogroup STM32H7xx_HAL_Applications
   * @{
@@ -72,6 +74,8 @@ static void Error_Handler(void);
 static void MPU_Config(void);
 static void CPU_CACHE_Enable(void);
 extern void MainTask(void);
+
+//static void GetPosition(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -103,7 +107,10 @@ int main(void)
   /* Init the STemWin GUI Library */  
   __HAL_RCC_CRC_CLK_ENABLE(); /* Enable the CRC Module */
   
-  GUI_Init();  
+  GUI_Init();
+
+  /*##-2- Touch screen initialization ########################################*/
+  BSP_TS_Init(0, &hTS);
 
   x_size=LCD_GetXSize();
   y_size=LCD_GetYSize();
@@ -135,14 +142,47 @@ int main(void)
   	  d_int.dim_riquadro_etichetta_y=d_int.dim_quadrato_piu_meno;
 
   	  //pulisci_schermo();
+
+  	  /*Disegno il cerchio centrale su cui far muovere il pallino.*/
   	  disegna_cerchio_centrale(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.raggio_cerchio_centrale, d_int.spessore_bordo);
-  	  disegna_indicatore_cerchio(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.angolo, d_int.raggio_cerchio_centrale, d_int.raggio_indicatore_cerchio);
+
+  	  /*Disegno i due rettangoli laterali, spaziati di un certo spazio calcolato dai bordi laterali e superiori.*/
+  	  disegna_frame_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, d_int.spessore_bordo);
+  	  //disegna_frame_barra_laterale(x_size-d_int.pan_barra_destra-d_int.dim_barra_x,d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, d_int.spessore_bordo);
 
   /* Infinite loop */
   for(;;)
-	{
-	  	}
+  {}
 }
+
+#if 0
+/**
+  * @brief  Configures and gets Touch screen position.
+  * @param  None
+  * @retval None
+  */
+static void GetPosition(void)
+{
+  /* Get Touch screen position */
+  BSP_TS_GetState(0,&TS_State);
+
+  /* Read the coordinate */
+  x = TS_State.TouchX;
+  y = TS_State.TouchY;
+
+  if ((TS_State.TouchDetected))
+  {
+
+	  d_int.angolo+=0.1;
+  pulisci_schermo();
+
+  disegna_cerchio_centrale(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.raggio_cerchio_centrale, d_int.spessore_bordo);
+
+  disegna_indicatore_cerchio(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.angolo, d_int.raggio_cerchio_centrale, d_int.raggio_indicatore_cerchio);
+
+  }
+}
+#endif
 
 /**
   * @brief  System Clock Configuration

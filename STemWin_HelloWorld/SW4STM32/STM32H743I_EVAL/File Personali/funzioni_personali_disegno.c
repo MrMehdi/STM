@@ -76,12 +76,15 @@ void disegna_cerchio_centrale(int pos_x, int pos_y, int raggio, int spessore_bor
 
 void disegna_indicatore_cerchio(int pos_x, int pos_y, double alfa, int raggio_dal_centro, int raggio_dimensione_indicatore)
 {
-  GUI_FillCircle(pos_x+raggio_dal_centro*cos(alfa), pos_y+raggio_dal_centro*(-sin(alfa)), raggio_dimensione_indicatore);
+	GUI_SetColor(GUI_GREEN);
+	GUI_FillCircle(pos_x+raggio_dal_centro*cos(alfa), pos_y+raggio_dal_centro*(-sin(alfa)), raggio_dimensione_indicatore);
 }
 
 void disegna_frame_barra_laterale(int pos_x, int pos_y, int dim_x, int dim_y, int spessore_bordo)
 {
+	GUI_SetColor(GUI_GREEN);
 	GUI_FillRect(pos_x, pos_y, dim_x, dim_y);
+	GUI_SetColor(COLORE_SFONDO);
 	GUI_FillRect(pos_x+spessore_bordo, pos_y+spessore_bordo, dim_x-2*spessore_bordo, dim_y-2*spessore_bordo);
 }
 

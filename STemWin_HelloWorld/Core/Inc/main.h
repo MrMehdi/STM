@@ -25,15 +25,37 @@
 #include "stm32h7xx_hal.h"
 #include "GUI.h"
 
-/* EVAL includes component */
 #include "stm32h743i_eval.h"
+#include "stm32h743i_eval_io.h"
+#include "stm32h743i_eval_lcd.h"
+#include "stm32h743i_eval_ts.h"
 #include "stm32h743i_eval_sdram.h"
+#include <stdlib.h>
+
+/* EVAL includes component */
+//#include "stm32h743i_eval.h"
+//#include "stm32h743i_eval_sdram.h"
+/* FatFs includes component */
+
+//#include "ff_gen_drv.h"
+//#include "usbh_diskio.h"
+#include "stm32_lcd.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+#define CONVERTED_LINE_BUFFER                    0x24000000
+
+/* Exported macro ------------------------------------------------------------*/
+/* Exported functions ------------------------------------------------------- */
+void Touchscreen_Calibration (void);
+uint16_t Calibration_GetX(uint16_t x);
+uint16_t Calibration_GetY(uint16_t y);
+uint8_t IsCalibrationDone(void);
 #endif /* __MAIN_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

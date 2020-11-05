@@ -48,9 +48,22 @@ Middlewares/Target/LCDConf_stm32h743i_eval.o: \
  ../../../Middlewares/ST/STemWin/inc/LCD.h \
  ../../../Middlewares/ST/STemWin/inc/Global.h \
  ../../../Middlewares/ST/STemWin/inc/GUI_Version.h \
- ../../../Drivers/BSP/STM32H743I-EVAL/stm32h743i_eval.h \
+ ../../../Core/Inc/stm32h743i_eval_conf.h \
+ ../../../Drivers/BSP/STM32H743I-EVAL/stm32h743i_eval_io.h \
  ../../../Core/Inc/stm32h743i_eval_conf.h \
  ../../../Drivers/BSP/STM32H743I-EVAL/stm32h743i_eval_errno.h \
+ ../../../Drivers/BSP/Components/Common/../Common/io.h \
+ ../../../Drivers/BSP/STM32H743I-EVAL/../Components/mfxstm32l152/mfxstm32l152.h \
+ ../../../Drivers/BSP/STM32H743I-EVAL/../Components/mfxstm32l152/mfxstm32l152_reg.h \
+ ../../../Drivers/BSP/STM32H743I-EVAL/stm32h743i_eval_ts.h \
+ ../../../Drivers/BSP/STM32H743I-EVAL/../Components/exc7200/exc7200.h \
+ ../../../Drivers/BSP/STM32H743I-EVAL/../Components/exc7200/exc7200_reg.h \
+ ../../../Core/Inc/exc7200_conf.h \
+ ../../../Drivers/BSP/STM32H743I-EVAL/../Components/ts3510/ts3510.h \
+ ../../../Drivers/BSP/STM32H743I-EVAL/../Components/ts3510/ts3510_reg.h \
+ ../../../Core/Inc/ts3510_conf.h \
+ ../../../Drivers/BSP/STM32H743I-EVAL/../Components/Common/ts.h \
+ ../../../Drivers/BSP/STM32H743I-EVAL/stm32h743i_eval.h \
  ../../../Drivers/BSP/STM32H743I-EVAL/stm32h743i_eval_sdram.h \
  ../../../Drivers/BSP/STM32H743I-EVAL/../Components/is42s32800g/is42s32800g.h \
  ../../../Core/Inc/is42s32800g_conf.h \
@@ -157,11 +170,37 @@ C:/Users/Computer/STM32CubeIDE/workspace_1.4.0/STemWin_HelloWorld/STemWin/Target
 
 ../../../Middlewares/ST/STemWin/inc/GUI_Version.h:
 
-../../../Drivers/BSP/STM32H743I-EVAL/stm32h743i_eval.h:
+../../../Core/Inc/stm32h743i_eval_conf.h:
+
+../../../Drivers/BSP/STM32H743I-EVAL/stm32h743i_eval_io.h:
 
 ../../../Core/Inc/stm32h743i_eval_conf.h:
 
 ../../../Drivers/BSP/STM32H743I-EVAL/stm32h743i_eval_errno.h:
+
+../../../Drivers/BSP/Components/Common/../Common/io.h:
+
+../../../Drivers/BSP/STM32H743I-EVAL/../Components/mfxstm32l152/mfxstm32l152.h:
+
+../../../Drivers/BSP/STM32H743I-EVAL/../Components/mfxstm32l152/mfxstm32l152_reg.h:
+
+../../../Drivers/BSP/STM32H743I-EVAL/stm32h743i_eval_ts.h:
+
+../../../Drivers/BSP/STM32H743I-EVAL/../Components/exc7200/exc7200.h:
+
+../../../Drivers/BSP/STM32H743I-EVAL/../Components/exc7200/exc7200_reg.h:
+
+../../../Core/Inc/exc7200_conf.h:
+
+../../../Drivers/BSP/STM32H743I-EVAL/../Components/ts3510/ts3510.h:
+
+../../../Drivers/BSP/STM32H743I-EVAL/../Components/ts3510/ts3510_reg.h:
+
+../../../Core/Inc/ts3510_conf.h:
+
+../../../Drivers/BSP/STM32H743I-EVAL/../Components/Common/ts.h:
+
+../../../Drivers/BSP/STM32H743I-EVAL/stm32h743i_eval.h:
 
 ../../../Drivers/BSP/STM32H743I-EVAL/stm32h743i_eval_sdram.h:
 
