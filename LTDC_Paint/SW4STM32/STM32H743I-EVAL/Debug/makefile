@@ -13,6 +13,7 @@ RM := rm -rf
 -include Middlewares/STM32_USBH_Library/Class/MSC/subdir.mk
 -include Middlewares/FatFs/Options/subdir.mk
 -include Middlewares/FatFs/Core/subdir.mk
+-include File\ personali/subdir.mk
 -include Drivers/STM32H7xx_HAL_Driver/subdir.mk
 -include Drivers/CMSIS/subdir.mk
 -include Drivers/BSP/STM32H743I_EVAL/subdir.mk

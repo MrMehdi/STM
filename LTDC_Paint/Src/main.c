@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    Display/LTDC_Paint/Src/main.c 
+  * @file    Display/LTDC_Paint/Src/main.c
   * @author  MCD Application Team
   * @brief   Main program body
   ******************************************************************************
@@ -19,28 +19,24 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "save.h"
-#include "math.h"
-#include "color.h"
-#include "color2.h"
-#include <time.h>
+#include "funzioni_disegno.h"
+//#include "save.h"
+//#include "math.h"
+//#include "color.h"
+//#include "color2.h"
 
-void delay(int milliseconds);
-
-//Nero
-#define COLORE_SFONDO 0xFFFFFFFFUL
 /** @addtogroup STM32H7xx_HAL_Applications
   * @{
   */
 
 /** @addtogroup LTDC_Paint
   * @{
-  */ 
+  */
 
 /* Private typedef -----------------------------------------------------------*/
 typedef enum {
-  APPLICATION_IDLE = 0,  
-  APPLICATION_RUNNIG    
+  APPLICATION_IDLE = 0,
+  APPLICATION_RUNNIG
 }MSC_ApplicationTypeDef;
 
 /* Private define ------------------------------------------------------------*/
@@ -64,44 +60,18 @@ BSP_IO_Init_t Init;
 uint32_t ts_status = BSP_ERROR_NONE;
 TS_Init_t hTS;
 
-const uint32_t aBMPHeader1[14]=         
-{0x26E64D42, 0x0000000B, 0x00360000, 0x00280000, 0x02440000, 0x01A40000, 0x00010000, 
+const uint32_t aBMPHeader1[14]=
+{0x26E64D42, 0x0000000B, 0x00360000, 0x00280000, 0x02440000, 0x01A40000, 0x00010000,
  0x00000018, 0xF5400000, 0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x0000};
 
-const uint32_t aBMPHeader2[14]=         
-{0x13A64D42, 0x00000004, 0x00360000, 0x00280000, 0x01A40000, 0x00D40000, 0x00010000, 
+const uint32_t aBMPHeader2[14]=
+{0x13A64D42, 0x00000004, 0x00360000, 0x00280000, 0x01A40000, 0x00D40000, 0x00010000,
  0x00000018, 0xF5400000, 0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x0000};
 
 /* Variable to save the state of USB */
 MSC_ApplicationTypeDef Appli_state = APPLICATION_IDLE;
 
 
-/* JNS Struttura che contiene tutte le informazioni sull'interfaccia, come dimensioni eccetera.*/
-typedef struct
-{
-	/*Variabile che controlla lo spessore del bordo delle figure.*/
-	uint32_t spessore_bordo;
-
-	/*Variabili relative al cerchio centrale.*/
-	uint32_t raggio_cerchio_centrale;
-	uint32_t centro_x_cerchio_centrale;
-	uint32_t centro_y_cerchio_centrale;
-
-	/*Variabili relative all'indicatore del cerchio.*/
-	uint32_t raggio_indicatore_cerchio;
-	double angolo;
-
-	/*Variabili relative ai rettangoli laterali.*/
-	uint32_t dim_barra_x;
-	uint32_t dim_barra_y;
-	uint32_t pan_barra_destra;
-	uint32_t pan_barra_alto;
-
-	/*Variabili relative ai pulsanti di controllo.*/
-	uint32_t dim_quadrato_piu_meno;
-	uint32_t dim_riquadro_etichetta_x;
-	uint32_t dim_riquadro_etichetta_y;
-}struttura_d_int;
 double test_percentuale = 0.0;
 
 struttura_d_int d_int;
@@ -133,7 +103,7 @@ static void MPU_Config(void);
   */
 int main(void)
 {
- 
+
   /* Configure the MPU attributes as Write Through for SDRAM*/
   MPU_Config();
   /* Enable the CPU Cache */
@@ -145,29 +115,29 @@ int main(void)
        - Low Level Initialization
      */
   HAL_Init();
-  
+
   /* Configure the system clock to 400 MHz */
-  SystemClock_Config(); 
-  
+  SystemClock_Config();
+
   /* Configure LED1 and LED3 */
   BSP_LED_Init(LED1);
   BSP_LED_Init(LED3);
-  
-  /*##-1- LCD Initialization #################################################*/ 
+
+  /*##-1- LCD Initialization #################################################*/
   /* Initialize the LCD */
   BSP_LCD_Init(0, LCD_ORIENTATION_LANDSCAPE);
   UTIL_LCD_SetFuncDriver(&LCD_Driver);
   /* Background Layer Initialization */
-  
+
   /* Set Foreground Layer */
   UTIL_LCD_SetLayer(0);
-  
+
   /* Enable the LCD */
   BSP_LCD_DisplayOn(0);
-  
+
   /* Clear the LCD Background layer */
   UTIL_LCD_Clear(UTIL_LCD_COLOR_WHITE);
-  
+
   BSP_LCD_GetXSize(0, &x_size);
   BSP_LCD_GetYSize(0, &y_size);
 
@@ -178,37 +148,15 @@ int main(void)
   /*##-2- Touch screen initialization ########################################*/
   BSP_TS_Init(0, &hTS);
 
-
   /*## JNS -3-Inizializzazione variabili di struttura dell'interfaccia. ########################################*/
-	/*Variabile che controlla lo spessore del bordo delle figure.*/
-  d_int.spessore_bordo = 5;
-
-	/*Variabili relative al cerchio centrale.*/
-  d_int.raggio_cerchio_centrale = (y_size/4);
-  d_int.centro_x_cerchio_centrale = (x_size/2);
-  d_int.centro_y_cerchio_centrale = (y_size/2);
-
-	/*Variabili relative all'indicatore del cerchio.*/
-  d_int.raggio_indicatore_cerchio = 5;
-  d_int.angolo = (2*M_PI)/3;
-
-	/*Variabili relative ai rettangoli laterali.*/
-  d_int.dim_barra_x = (x_size/8);
-  d_int.dim_barra_y =  2*(y_size/3);
-  d_int.pan_barra_destra = ((x_size/3)-d_int.dim_barra_x)/2;
-  d_int.pan_barra_alto = (y_size-d_int.dim_barra_y)/2;
-
-	/*Variabili relative ai pulsanti di controllo.*/
-  d_int.dim_quadrato_piu_meno=(x_size/16);
-  d_int.dim_riquadro_etichetta_x=(x_size/8);
-  d_int.dim_riquadro_etichetta_y=d_int.dim_quadrato_piu_meno;
+  configura_dimensioni_interfaccia(&d_int, x_size, y_size);
 
 #if 0
-  /*##-3- USB Initialization #################################################*/ 
-  
+  /*##-3- USB Initialization #################################################*/
+
   /* Set the source of USB clock (PLL3*/
   __HAL_RCC_USB_CONFIG(RCC_USBCLKSOURCE_PLL3);
-  
+
   /* Enable the USB voltage level detector */
   HAL_PWREx_EnableUSBVoltageDetector();
 
@@ -218,19 +166,19 @@ int main(void)
     /* USB Initialization Error */
     Error_Handler();
   }
-  
+
   /* Add Supported Class */
   USBH_RegisterClass(&hUSB_Host, USBH_MSC_CLASS);
-  
+
   /* Start Host Process */
   if (USBH_Start(&hUSB_Host) != USBH_OK)
   {
     /* USB Initialization Error */
     Error_Handler();
   }
-   
+
   /*##-4- Link the USB Mass Storage disk I/O driver ##########################*/
-  if(FATFS_LinkDriver(&USBH_Driver, USB_Path) != 0) 
+  if(FATFS_LinkDriver(&USBH_Driver, USB_Path) != 0)
   {
     /* FatFs Initialization Error */
     Error_Handler();
@@ -242,19 +190,19 @@ int main(void)
     Error_Handler();
   }
 #endif
-  
+
   /*##-6- Draw the menu ######################################################*/
   /*Viene richiamata una volta sola e disegna l'ossatura dell'interfaccia.*/
   Disegna_Interfaccia();
-  
-  /* Infinite loop */  
+
+  /* Infinite loop */
   while (1)
-  { 
+  {
 	  /*Viene richiamata una volta sola e disegna l'ossatura dell'interfaccia.*/
 	  //Aggiorna_Interfaccia();
-    /*##-7- Configure the touch screen and Get the position ##################*/    
+    /*##-7- Configure the touch screen and Get the position ##################*/
     GetPosition();
-    
+
 #if 0
     USBH_Process(&hUSB_Host);
 #endif
@@ -268,9 +216,9 @@ int main(void)
   * @retval None
   */
 static void USBH_UserProcess(USBH_HandleTypeDef *phost, uint8_t id)
-{  
+{
   switch (id)
-  { 
+  {
   case HOST_USER_DISCONNECTION:
     Appli_state = APPLICATION_IDLE;
     if (f_mount(&USBDISK_FatFs, "", 0) != FR_OK)
@@ -279,7 +227,7 @@ static void USBH_UserProcess(USBH_HandleTypeDef *phost, uint8_t id)
       Error_Handler();
     }
     break;
-    
+
   case HOST_USER_CLASS_ACTIVE:
     Appli_state = APPLICATION_RUNNIG;
     break;
@@ -295,7 +243,7 @@ static void USBH_UserProcess(USBH_HandleTypeDef *phost, uint8_t id)
 static void GetPosition(void)
 {
 #if 0
-  static uint32_t color_width;  
+  static uint32_t color_width;
   static uint32_t color ;
 
   if (x_size == 640)
@@ -307,20 +255,17 @@ static void GetPosition(void)
     color_width = 19;
   }
 #endif
-  
+
   /* Get Touch screen position */
-  BSP_TS_GetState(0,&TS_State); 
-  
+  BSP_TS_GetState(0,&TS_State);
+
   /* Read the coordinate */
   x = TS_State.TouchX;
   y = TS_State.TouchY;
-  
+
   if ((TS_State.TouchDetected))
   {
-	  //d_int.angolo+=0.1;
 	  Aggiorna_Interfaccia();
-	  //Disegna_Interfaccia();
-
   }
 
 #if 0
@@ -329,7 +274,7 @@ static void GetPosition(void)
     UTIL_LCD_FillCircle((x), (y), Radius,UTIL_LCD_GetTextColor());
   }
   else if ((TS_State.TouchDetected) & (x > 0 ) & ( x < 50 ))
-  { 
+  {
     if ((TS_State.TouchDetected) & ( y > 0 ) & ( y < color_width ))
     {
       UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_WHITE);
@@ -389,7 +334,7 @@ static void GetPosition(void)
     {
       UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_BLACK);
       Update_Size(Radius);
-    }    
+    }
     else if ((TS_State.TouchDetected) &  (y > (12 * color_width)) & (y < (13 * color_width)))
     {
       /* Get the current text color */
@@ -404,86 +349,47 @@ static void GetPosition(void)
       x = 0;
       y = 0;
     }
-    Update_Color();    
+    Update_Color();
   }
   else if ((TS_State.TouchDetected) & (x > 70 ) & (y > (12 * color_width)) & (y < (13 * color_width)) & ( x < 120 ))
-  {    
+  {
     Radius = 20;
     Update_Size(Radius);
   }
   else if ((TS_State.TouchDetected) & (x > 120 ) & (y > (12 * color_width)) & (y < (13 * color_width)) & ( x < 170 ))
-  {    
+  {
     Radius = 15;
     Update_Size(Radius);
   }
   else if ((TS_State.TouchDetected) & (x > 170 ) & (y > (12 * color_width)) & (y < (13 * color_width)) & ( x < 220 ))
-  {    
+  {
     Radius = 10;
     Update_Size(Radius);
   }
   else if ((TS_State.TouchDetected) & (x > 220 ) & (y > (12 * color_width)) & (y < (13 * color_width)) & ( x < 270 ))
-  {    
+  {
     Radius = 5;
     Update_Size(Radius);
   }
   else if ((TS_State.TouchDetected) & (x > 270 ) & (y > (12 * color_width)) & (y < (13 * color_width)) & ( x < 320 ))
-  {    
+  {
     Radius = 2;
     Update_Size(Radius);
-  }  
+  }
   else if ((TS_State.TouchDetected) & (((x > (x_size-5) ) & (y > (12 * color_width)) & (y < (13 * color_width))) | (( x < 55 ) & ( y < 5 ))))
-  {    
+  {
     TS_State.TouchX = 0;
     TS_State.TouchY = 0;
   }
   else if ((TS_State.TouchDetected) & (x > 320) & (y > (y_size - 50)) & (x < 370) & (y < y_size ))
-  {   
+  {
     Save_Picture();
   }
 #endif
 }
 
 /*ATTENZIONE! LO (0,0) è in alto a sx*/
-static void disegna_cerchio_centrale(uint32_t pos_x, uint32_t pos_y, uint32_t raggio, uint32_t spessore_bordo)
-{
-	//UTIL_LCD_FillRect(pos_x-raggio-d_int.raggio_indicatore_cerchio, pos_y-raggio-d_int.raggio_indicatore_cerchio, raggio*2+d_int.raggio_indicatore_cerchio, raggio*2+d_int.raggio_indicatore_cerchio, COLORE_SFONDO);
-	UTIL_LCD_FillCircle(pos_x, pos_y, raggio, UTIL_LCD_COLOR_GREEN);
-	UTIL_LCD_FillCircle(pos_x, pos_y, raggio-spessore_bordo, COLORE_SFONDO);
-}
 
-static void disegna_indicatore_cerchio(uint32_t pos_x, uint32_t pos_y, double alfa, uint32_t raggio_dal_centro, uint32_t raggio_dimensione_indicatore)
-{
-	  UTIL_LCD_FillCircle(pos_x+raggio_dal_centro*cos(alfa), pos_y+raggio_dal_centro*(-sin(alfa)), raggio_dimensione_indicatore, UTIL_LCD_COLOR_GREEN);
-}
-
-static void disegna_frame_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y, uint32_t spessore_bordo)
-{
-	  UTIL_LCD_FillRect(pos_x, pos_y, dim_x, dim_y, UTIL_LCD_COLOR_GREEN);
-	  UTIL_LCD_FillRect(pos_x+spessore_bordo, pos_y+spessore_bordo, dim_x-2*spessore_bordo, dim_y-2*spessore_bordo, COLORE_SFONDO);
-}
-
-static void disegna_contenuto_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y, uint32_t spessore_bordo, double percentuale)
-{
-	//UTIL_LCD_FillRect(pos_x+spessore_bordo, pos_y+spessore_bordo, dim_x-2*spessore_bordo, dim_y*percentuale-0.5*spessore_bordo, UTIL_LCD_COLOR_YELLOW);
-	//UTIL_LCD_FillRect(pos_x+spessore_bordo, pos_y+dim_y*percentuale+0.5*spessore_bordo, dim_x-2*spessore_bordo, dim_y*(1.0-percentuale)-1.5*spessore_bordo, UTIL_LCD_COLOR_RED);
-
-	//TODO: Correggere. verificare per percentuale = 0 e 100
-	UTIL_LCD_FillRect(pos_x+spessore_bordo, pos_y+spessore_bordo, dim_x-2*spessore_bordo, dim_y*percentuale-spessore_bordo, UTIL_LCD_COLOR_YELLOW);
-	//UTIL_LCD_FillRect(pos_x+spessore_bordo, pos_y+dim_y*percentuale+spessore_bordo, dim_x-2*spessore_bordo, dim_y*(1.0-percentuale)-*spessore_bordo, UTIL_LCD_COLOR_RED);
-}
-
-static void disegna_pulsante_controllo(uint32_t pos_x, uint32_t pos_y, uint32_t dim_quadrato, uint32_t dim_riquadro_etichetta_x, uint32_t dim_riquadro_etichetta_y)
-{
-	//TODO: ottimizzare
-/*
-	  UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_DARKRED);
-	  UTIL_LCD_SetFont(&Font20);
-	  UTIL_LCD_DisplayStringAt(pos_x, pos_y, (uint8_t *)"+", LEFT_MODE);
-*/
-	  UTIL_LCD_FillRect(pos_x, pos_y, dim_quadrato, dim_quadrato, UTIL_LCD_COLOR_RED);
-	  UTIL_LCD_FillRect(pos_x+dim_quadrato, pos_y, dim_riquadro_etichetta_x, dim_riquadro_etichetta_y, UTIL_LCD_COLOR_WHITE);
-	  UTIL_LCD_FillRect(pos_x+dim_quadrato+dim_riquadro_etichetta_x, pos_y, dim_quadrato, dim_quadrato, UTIL_LCD_COLOR_BLUE);
-}
 
 /**
   * @brief Aggiorna gli elementi nuovi dell'interfaccia.
@@ -491,43 +397,16 @@ static void disegna_pulsante_controllo(uint32_t pos_x, uint32_t pos_y, uint32_t 
   * @retval None
   */
 
-void delay(int milliseconds)
-{
-    long pause;
-    clock_t now,then;
-
-    pause = milliseconds*(CLOCKS_PER_SEC/1000);
-    now = then = clock();
-    while( (now-then) < pause )
-        now = clock();
-}
-
 static void Aggiorna_Interfaccia(void)
 {
-
-	/* Set background Layer */
-	//UTIL_LCD_SetLayer(0);
-	//delay(1000);
-	/* Clear the LCD */
-	//UTIL_LCD_Clear(COLORE_SFONDO);
-	//BSP_LCD_GetXSize(0, &x_size);
-	//BSP_LCD_GetYSize(0, &y_size);
-
-//	disegna_cerchio_centrale(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.raggio_cerchio_centrale, d_int.spessore_bordo);
-//	disegna_indicatore_cerchio(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.angolo, d_int.raggio_cerchio_centrale, d_int.raggio_indicatore_cerchio);
-
 	test_percentuale+=0.01;
 	/*Disegno il contenuto dei rettangoli.*/
-	disegna_contenuto_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y,  d_int.spessore_bordo, (1.0-test_percentuale));
-	disegna_contenuto_barra_laterale(x_size-d_int.pan_barra_destra-d_int.dim_barra_x, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y,  d_int.spessore_bordo, (1.0-test_percentuale));
+	disegna_contenuto_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, test_percentuale);
+	//disegna_contenuto_barra_laterale(x_size-d_int.pan_barra_destra-d_int.dim_barra_x, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y,  d_int.spessore_bordo, (1.0-test_percentuale));
+	aggiorna_indicatore_cerchio(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.angolo, (d_int.angolo += 0.1), d_int.raggio_cerchio_centrale, d_int.raggio_indicatore_cerchio);
+
 }
 
-
-/**
-  * @brief  Funzioni per disegnare i vari elementi della UI.
-  * @param  None
-  * @retval None
-  */
 
 /**
   * @brief  Draws the menu.
@@ -535,10 +414,10 @@ static void Aggiorna_Interfaccia(void)
   * @retval None
   */
 static void Disegna_Interfaccia(void)
-{ 
+{
   /* Set background Layer */
   UTIL_LCD_SetLayer(0);
-  
+
 /* Clear the LCD */
   UTIL_LCD_Clear(COLORE_SFONDO);
 
@@ -546,22 +425,10 @@ static void Disegna_Interfaccia(void)
   BSP_LCD_GetYSize(0, &y_size);
 
   //PERSONALE
-
-  //static void disegna_pulsante_controllo(uint32_t pos_x, uint32_t pos_y, uint32_t dim_quadrato, uint32_t dim_riquadro_etichetta_x, uint32_t dim_riquadro_etichetta_y)
-
-  /*
-  d_int.dim_quadrato_piu_meno;
-  d_int.dim_riquadro_etichetta_x;
-  d_int.dim_riquadro_etichetta_y;
-   *
-   */
-
   disegna_pulsante_controllo(0,0, d_int.dim_quadrato_piu_meno, d_int.dim_riquadro_etichetta_x, d_int.dim_riquadro_etichetta_y);
-  /*
-     * TODO: raggruppare tutto in un'unica funzione o lasciare solo le istruzioni per il disegno in Disegna_Interfaccia().
-     */
+
   /*Disegno il cerchio centrale su cui far muovere il pallino.*/
-  disegna_cerchio_centrale(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.raggio_cerchio_centrale, d_int.spessore_bordo);
+  disegna_cerchio_centrale(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.raggio_cerchio_centrale);
 
   /*
   UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_DARKRED);
@@ -570,13 +437,13 @@ static void Disegna_Interfaccia(void)
   */
 
   /*Disegno i due rettangoli laterali, spaziati di un certo spazio calcolato dai bordi laterali e superiori.*/
-  disegna_frame_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, d_int.spessore_bordo);
-  disegna_frame_barra_laterale(x_size-d_int.pan_barra_destra-d_int.dim_barra_x,d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, d_int.spessore_bordo);
+  disegna_frame_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y);
+  disegna_frame_barra_laterale(x_size-d_int.pan_barra_destra-d_int.dim_barra_x,d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y);
 
   /*Disegno il contenuto dei rettangoli.*/
 	test_percentuale+=0.01;
-	disegna_contenuto_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y,  d_int.spessore_bordo, (1.0-test_percentuale));
-	disegna_contenuto_barra_laterale(x_size-d_int.pan_barra_destra-d_int.dim_barra_x, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y,  d_int.spessore_bordo, (1.0-test_percentuale));
+	disegna_contenuto_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, (1.0-test_percentuale));
+	disegna_contenuto_barra_laterale(x_size-d_int.pan_barra_destra-d_int.dim_barra_x, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, (1.0-test_percentuale));
 
   /*Disegno l'indicatore del cerchio.*/
   disegna_indicatore_cerchio(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.angolo, d_int.raggio_cerchio_centrale, d_int.raggio_indicatore_cerchio);
@@ -584,7 +451,7 @@ static void Disegna_Interfaccia(void)
 
 #if 0
   if (x_size == 640)
-  {  
+  {
     /* Draw color image */
     BSP_LCD_DrawBitmap(0, 0, 0, (uint8_t *)color);
   }
@@ -593,7 +460,7 @@ static void Disegna_Interfaccia(void)
     /* Draw color image */
     BSP_LCD_DrawBitmap(0, 0, 0, (uint8_t *)color2);
   }
-  
+
   /* Draw save image */
   UTIL_LCD_DrawBitmap(310, (y_size - 50), (uint8_t *)save);
 
@@ -605,7 +472,7 @@ static void Disegna_Interfaccia(void)
   UTIL_LCD_DrawRect(63, 3, (x_size - 66), (y_size - 66), UTIL_LCD_COLOR_BLACK);
   UTIL_LCD_DrawRect(65, 5, (x_size - 70), (y_size - 70), UTIL_LCD_COLOR_BLACK);
   UTIL_LCD_DrawRect(67, 7, (x_size - 74), (y_size - 74), UTIL_LCD_COLOR_BLACK);
-  
+
   /* Draw size icons */
   UTIL_LCD_FillRect(60, (y_size - 48), 250, 48, UTIL_LCD_COLOR_BLACK);
   UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_WHITE);
@@ -613,14 +480,14 @@ static void Disegna_Interfaccia(void)
   UTIL_LCD_FillCircle(145, (y_size - 24), 15, UTIL_LCD_COLOR_WHITE);
   UTIL_LCD_FillCircle(195, (y_size - 24), 10, UTIL_LCD_COLOR_WHITE);
   UTIL_LCD_FillCircle(245, (y_size - 24), 5, UTIL_LCD_COLOR_WHITE);
-  UTIL_LCD_FillCircle(295, (y_size - 24), 2, UTIL_LCD_COLOR_WHITE);  
-  
+  UTIL_LCD_FillCircle(295, (y_size - 24), 2, UTIL_LCD_COLOR_WHITE);
+
   UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_DARKRED);
   UTIL_LCD_SetFont(&Font8);
-  UTIL_LCD_DisplayStringAt(360, (y_size - 55), (uint8_t *)"Selected Color  Size", LEFT_MODE);  
-  UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_BLACK); 
-  UTIL_LCD_FillRect(380, (y_size - 40), 30, 30, UTIL_LCD_COLOR_BLACK);  
-  UTIL_LCD_FillCircle(450, (y_size- 24), Radius, UTIL_LCD_COLOR_BLACK); 
+  UTIL_LCD_DisplayStringAt(360, (y_size - 55), (uint8_t *)"Selected Color  Size", LEFT_MODE);
+  UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_BLACK);
+  UTIL_LCD_FillRect(380, (y_size - 40), 30, 30, UTIL_LCD_COLOR_BLACK);
+  UTIL_LCD_FillCircle(450, (y_size- 24), Radius, UTIL_LCD_COLOR_BLACK);
 
 #endif
 }
@@ -632,7 +499,7 @@ static void Disegna_Interfaccia(void)
   * @retval None
   */
 void Save_Picture(void)
-{ 
+{
   FRESULT res1, res2;    /* FatFs function common result code */
   uint32_t byteswritten; /* File write count */
   uint32_t sourceAddress;
@@ -642,27 +509,27 @@ void Save_Picture(void)
   UTIL_LCD_SetFont(&Font20);
 
   sourceAddress = LCD_LAYER_0_ADDRESS + ((x_size * (y_size - 61) + 60) * 4);
-   
+
   /* Configure the hlcd_dma2d For ARGB8888 to RGB888 conversion */
   hlcd_dma2d.Init.Mode         = DMA2D_M2M_PFC;
   hlcd_dma2d.Init.ColorMode    = DMA2D_OUTPUT_RGB888;
-  hlcd_dma2d.Init.OutputOffset = 0;     
-  
+  hlcd_dma2d.Init.OutputOffset = 0;
+
   /* Foreground Configuration */
   hlcd_dma2d.LayerCfg[1].AlphaMode = DMA2D_NO_MODIF_ALPHA;
   hlcd_dma2d.LayerCfg[1].InputAlpha = 0xFF;
   hlcd_dma2d.LayerCfg[1].InputColorMode = DMA2D_INPUT_ARGB8888;
   hlcd_dma2d.LayerCfg[1].InputOffset = 0;
-  
-  hlcd_dma2d.Instance = DMA2D;   
+
+  hlcd_dma2d.Instance = DMA2D;
   /* Turn LED1 and LED3 Off */
   BSP_LED_Off(LED1);
   BSP_LED_Off(LED3);
-  
+
   if (Appli_state == APPLICATION_RUNNIG)
   {
     UTIL_LCD_DisplayStringAt(10, (y_size-40), (uint8_t *)"Saving ...", RIGHT_MODE);
-    
+
     HAL_DMA2D_DeInit(&hlcd_dma2d);
     HAL_DMA2D_Init(&hlcd_dma2d);
     HAL_DMA2D_ConfigLayer(&hlcd_dma2d, 1);
@@ -678,35 +545,35 @@ void Save_Picture(void)
        /*##-3- Write data to the BMP file #####################################*/
       /* Write the BMP header */
       if (x_size == 640)
-      {  
+      {
         /* if ampire 640x480 LCD is used */
         res1 = f_write(&MyFile, (uint32_t *)aBMPHeader1, 54, (void *)&byteswritten);
       }
       else
-      {  
+      {
         /* if ampire 480x272 LCD is used */
         res1 = f_write(&MyFile, (uint32_t *)aBMPHeader2, 54, (void *)&byteswritten);
-      }     
-      
+      }
+
       /* Note that BMP file is organized as follow :
          -  first a header of 54 bytes
          - then pixels scan lines ordered from last line of the image to first one.
          It is then mandatory to reorder the image line from last line to first.
       */
       for(index=0; index < (y_size - 60); index++)
-      {        
+      {
         /* Convert a Line from ARGB8888 to RGB888 using the hlcd_dma2d */
         if (HAL_DMA2D_Start(&hlcd_dma2d, sourceAddress, CONVERTED_LINE_BUFFER, (x_size - 60), 1) == HAL_OK)
         {
-          /* Polling For DMA transfer */  
+          /* Polling For DMA transfer */
           HAL_DMA2D_PollForTransfer(&hlcd_dma2d, 25);
         }
-        
-        /*As the hlcd_dma2d destiantion address is located in the D1 AXI-SRAM which 
-        is cacheable, it is necessary to invalidate the data cache the hlcd_dma2d transfer 
+
+        /*As the hlcd_dma2d destiantion address is located in the D1 AXI-SRAM which
+        is cacheable, it is necessary to invalidate the data cache the hlcd_dma2d transfer
         before saving these data to the bmp file using the CPU */
-        SCB_InvalidateDCache_by_Addr((uint32_t *)CONVERTED_LINE_BUFFER, ((x_size-60)*3)); 
-        
+        SCB_InvalidateDCache_by_Addr((uint32_t *)CONVERTED_LINE_BUFFER, ((x_size-60)*3));
+
         /* Save Converted line to the bmp file */
         res2 = f_write(&MyFile, (uint32_t *)CONVERTED_LINE_BUFFER, ((x_size-60)*3), (void *)&byteswritten);
         if((res2 != FR_OK) || (byteswritten == 0))
@@ -716,7 +583,7 @@ void Save_Picture(void)
         /* Upodate hlcd_dma2d source Address */
         sourceAddress -= x_size*4;
       }
-      
+
       if((res1 != FR_OK) || (res2 != FR_OK) || (byteswritten == 0))
       {
         /* 'image' file Write or EOF Error */
@@ -759,18 +626,18 @@ void Save_Picture(void)
 HAL_StatusTypeDef MX_LTDC_ClockConfig(LTDC_HandleTypeDef *hltdc)
 {
   static RCC_PeriphCLKInitTypeDef  periph_clk_init_struct;
-  
+
     /* In case of double layers the bandwidth is arround 80MBytesPerSec => 20MHz (<25MHz) */
     /* so the PLL3R is configured to provide this clock */
     /* AMPIRE640480 LCD clock configuration */
     /* PLL3_VCO Input = HSE_VALUE/PLL3M = 1 Mhz */
     /* PLL3_VCO Output = PLL3_VCO Input * PLL3N = 336 Mhz */
     /* PLLLCDCLK = PLL3_VCO Output/PLL3R = 336/16 = 21Mhz */
-    /* LTDC clock frequency = PLLLCDCLK = 21 Mhz */     
-    /* USB uses same pll3 as clock frequency and PLL3Q as devider: USB clock frequency = 48 Mhz */ 
+    /* LTDC clock frequency = PLLLCDCLK = 21 Mhz */
+    /* USB uses same pll3 as clock frequency and PLL3Q as devider: USB clock frequency = 48 Mhz */
     periph_clk_init_struct.PLL3.PLL3R = 16;
     periph_clk_init_struct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
-    periph_clk_init_struct.PLL3.PLL3M = 25;    
+    periph_clk_init_struct.PLL3.PLL3M = 25;
     periph_clk_init_struct.PLL3.PLL3N = 336;
     periph_clk_init_struct.PLL3.PLL3FRACN = 0;
     periph_clk_init_struct.PLL3.PLL3P = 2;
@@ -778,7 +645,7 @@ HAL_StatusTypeDef MX_LTDC_ClockConfig(LTDC_HandleTypeDef *hltdc)
     periph_clk_init_struct.PLL3.PLL3VCOSEL = RCC_PLL3VCOMEDIUM;
     periph_clk_init_struct.PLL3.PLL3RGE = RCC_PLL3VCIRANGE_0;
    return  HAL_RCCEx_PeriphCLKConfig(&periph_clk_init_struct);
-  
+
 }
 
 /**
@@ -802,16 +669,16 @@ static void Error_Handler(void)
   * @retval None
   */
 static void Update_Color(void)
-{ 
+{
   static uint32_t color;
-  
+
   /* Get the current text color */
   color = UTIL_LCD_GetTextColor();
   /* Update the selected color icon */
   UTIL_LCD_FillRect(380, (y_size-40), 30, 30, color);
-  UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_BLACK);    
+  UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_BLACK);
   UTIL_LCD_DrawRect(380, (y_size-40), 30, 30, color);
-  UTIL_LCD_SetTextColor(color); 
+  UTIL_LCD_SetTextColor(color);
 }
 
 /**
@@ -826,22 +693,22 @@ static void Update_Size(uint8_t size)
 
   BSP_LCD_GetXSize(0, &x_size);
   BSP_LCD_GetYSize(0, &y_size);
-  /* Get the current text color */ 
+  /* Get the current text color */
   color = UTIL_LCD_GetTextColor();
   /* Update the selected size icon */
   UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_WHITE);
   UTIL_LCD_FillCircle(450, (y_size -24), 20, UTIL_LCD_COLOR_WHITE);
-  UTIL_LCD_SetTextColor(color);  
+  UTIL_LCD_SetTextColor(color);
   UTIL_LCD_FillCircle(450, (y_size-24), size, UTIL_LCD_COLOR_WHITE);
-  UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_BLACK);    
+  UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_BLACK);
   UTIL_LCD_DrawCircle(450, (y_size-24), size, UTIL_LCD_COLOR_BLACK);
-  UTIL_LCD_SetTextColor(color);  
+  UTIL_LCD_SetTextColor(color);
 }
 #endif
 
 /**
   * @brief  System Clock Configuration
-  *         The system Clock is configured as follow : 
+  *         The system Clock is configured as follow :
   *            System Clock source            = PLL (HSE)
   *            SYSCLK(Hz)                     = 400000000 (CPU Clock)
   *            HCLK(Hz)                       = 200000000 (AXI and AHBs Clock)
@@ -866,7 +733,7 @@ static void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_OscInitTypeDef RCC_OscInitStruct;
   HAL_StatusTypeDef ret = HAL_OK;
-  
+
   /*!< Supply configuration update enable */
   HAL_PWREx_ConfigSupply(PWR_LDO_SUPPLY);
 
@@ -876,7 +743,7 @@ static void SystemClock_Config(void)
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   while(!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {}
-  
+
   /* Enable HSE Oscillator and activate PLL with HSE as source */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
@@ -900,7 +767,7 @@ static void SystemClock_Config(void)
     Error_Handler();
   }
 
- 
+
 /* Select PLL as system clock source and configure  bus clocks dividers */
   RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_D1PCLK1 | RCC_CLOCKTYPE_PCLK1 | \
                                  RCC_CLOCKTYPE_PCLK2  | RCC_CLOCKTYPE_D3PCLK1);
@@ -918,15 +785,15 @@ static void SystemClock_Config(void)
   {
     Error_Handler();
   }
- 
-  /*activate CSI clock mondatory for I/O Compensation Cell*/  
+
+  /*activate CSI clock mondatory for I/O Compensation Cell*/
   __HAL_RCC_CSI_ENABLE() ;
-    
+
   /* Enable SYSCFG clock mondatory for I/O Compensation Cell */
   __HAL_RCC_SYSCFG_CLK_ENABLE() ;
-  
-  /* Enables the I/O Compensation Cell */    
-  HAL_EnableCompensationCell();  
+
+  /* Enables the I/O Compensation Cell */
+  HAL_EnableCompensationCell();
 }
 
 /**
@@ -955,7 +822,7 @@ static void CPU_CACHE_Enable(void)
 static void MPU_Config(void)
 {
 MPU_Region_InitTypeDef MPU_InitStruct;
-  
+
   /* Disable the MPU */
   HAL_MPU_Disable();
 
@@ -988,7 +855,7 @@ MPU_Region_InitTypeDef MPU_InitStruct;
   * @retval None
   */
 void assert_failed(uint8_t* file, uint32_t line)
-{ 
+{
   /* User can add his own implementation to report the file name and line number,
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 

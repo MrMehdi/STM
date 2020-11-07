@@ -76,8 +76,8 @@ Application/User/main.o: \
  ../../../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_bot.h \
  ../../../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_scsi.h \
  ../../../Utilities/lcd/stm32_lcd.h \
- ../../../Utilities/lcd/../Fonts/fonts.h ../../../Inc/save.h \
- ../../../Inc/color.h ../../../Inc/color2.h
+ ../../../Utilities/lcd/../Fonts/fonts.h \
+ C:/Users/Computer/STM32CubeIDE/workspace_1.4.0/LTDC_Paint/SW4STM32/STM32H743I-EVAL/File\ personali/funzioni_disegno.h
 
 ../../../Inc/main.h:
 
@@ -235,8 +235,4 @@ Application/User/main.o: \
 
 ../../../Utilities/lcd/../Fonts/fonts.h:
 
-../../../Inc/save.h:
-
-../../../Inc/color.h:
-
-../../../Inc/color2.h:
+C:/Users/Computer/STM32CubeIDE/workspace_1.4.0/LTDC_Paint/SW4STM32/STM32H743I-EVAL/File\ personali/funzioni_disegno.h:
