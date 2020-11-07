@@ -1,6 +1,6 @@
 git init
 git checkout -b sperimentale
-git add STemWin_HelloWorld
+git add LTDC_PAINT
 git add Documentazione
 git add push.bat
 git add push_sperimentale.bat

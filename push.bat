@@ -1,6 +1,6 @@
 git init
 <<<<<<< HEAD
-git add STemWin_HelloWorld
+git add LTDC_PAINT
 git add Documentazione
 git add push.bat
 git add push_sperimentale.bat
