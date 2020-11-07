@@ -36,19 +36,19 @@ typedef struct
 	uint32_t pan_barra_destra;
 	uint32_t pan_barra_alto;
 
-	/*Variabili relative ai pulsanti di controllo.*/
-	uint32_t dim_quadrato_piu_meno;
-	uint32_t dim_riquadro_etichetta_x;
-	uint32_t dim_riquadro_etichetta_y;
+
 }struttura_d_int;
 
+//Funzioni di configurazione
 void configura_dimensioni_interfaccia(struttura_d_int * d_int, uint32_t x_size, uint32_t y_size);
+
+//Funzioni disegno
 void disegna_cerchio_centrale(uint32_t pos_x, uint32_t pos_y, uint32_t raggio);
 void disegna_indicatore_cerchio(uint32_t pos_x, uint32_t pos_y, double alfa, uint32_t raggio_dal_centro, uint32_t raggio_dimensione_indicatore);
-void aggiorna_indicatore_cerchio(uint32_t pos_x, uint32_t pos_y, double alfa_prec, double alfa, uint32_t raggio_dal_centro, uint32_t raggio_dimensione_indicatore);
 void disegna_frame_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y);
-void disegna_contenuto_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y, double percentuale);
-void disegna_pulsante_controllo(uint32_t pos_x, uint32_t pos_y, uint32_t dim_quadrato, uint32_t dim_riquadro_etichetta_x, uint32_t dim_riquadro_etichetta_y);
 
+//Funzioni di aggiornamento
+void aggiorna_indicatore_cerchio(uint32_t pos_x, uint32_t pos_y, double alfa_prec, double alfa, uint32_t raggio_dal_centro, uint32_t raggio_dimensione_indicatore);
+void disegna_contenuto_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y, double percentuale);
 
 #endif /*APPLICATION_USER_FUNZIONI_DISEGNO_H_ */

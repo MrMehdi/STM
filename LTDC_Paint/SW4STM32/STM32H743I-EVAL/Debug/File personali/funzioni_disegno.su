@@ -1,7 +1,6 @@
 funzioni_disegno.c:18:6:configura_dimensioni_interfaccia	12	static
-funzioni_disegno.c:44:6:disegna_cerchio_centrale	0	static
-funzioni_disegno.c:49:6:disegna_indicatore_cerchio	40	static
-funzioni_disegno.c:54:6:aggiorna_indicatore_cerchio	72	static
-funzioni_disegno.c:64:6:disegna_frame_barra_laterale	16	static
-funzioni_disegno.c:71:6:disegna_contenuto_barra_laterale	48	static
-funzioni_disegno.c:79:6:disegna_pulsante_controllo	32	static
+funzioni_disegno.c:42:6:disegna_cerchio_centrale	0	static
+funzioni_disegno.c:47:6:disegna_indicatore_cerchio	40	static
+funzioni_disegno.c:52:6:aggiorna_indicatore_cerchio	72	static
+funzioni_disegno.c:62:6:disegna_frame_barra_laterale	16	static
+funzioni_disegno.c:69:6:disegna_contenuto_barra_laterale	40	static

@@ -20,6 +20,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "funzioni_disegno.h"
+#include "funzioni_pulsanti.h"
+#include <string.h>
+
 //#include "save.h"
 //#include "math.h"
 //#include "color.h"
@@ -75,6 +78,10 @@ MSC_ApplicationTypeDef Appli_state = APPLICATION_IDLE;
 double test_percentuale = 0.0;
 
 struttura_d_int d_int;
+
+struttura_d_pulsanti pulsante_U;
+struttura_d_pulsanti pulsante_F;
+struttura_d_pulsanti pulsante_FI;
 
 uint8_t workBuffer[_MAX_SS];
 
@@ -150,6 +157,10 @@ int main(void)
 
   /*## JNS -3-Inizializzazione variabili di struttura dell'interfaccia. ########################################*/
   configura_dimensioni_interfaccia(&d_int, x_size, y_size);
+  configura_pulsante(&pulsante_U, x_size, y_size, 0, 0);
+  strcpy( pulsante_U.etichetta, "U");
+  pulsante_U.pos_x = 50;
+  pulsante_U.pos_y = 20;
 
 #if 0
   /*##-3- USB Initialization #################################################*/
@@ -263,9 +274,28 @@ static void GetPosition(void)
   x = TS_State.TouchX;
   y = TS_State.TouchY;
 
+#if 0
   if ((TS_State.TouchDetected))
   {
 	  Aggiorna_Interfaccia();
+  }
+#endif
+
+  if ((TS_State.TouchDetected))
+  {
+	  if (verifica_pressione_piu(pulsante_U,x ,y))
+	  {
+			test_percentuale+=0.01;
+			d_int.angolo += 0.05;
+			Aggiorna_Interfaccia();
+	  }
+
+	  if (verifica_pressione_meno(pulsante_U,x ,y))
+	  {
+			test_percentuale -=0.01;
+			d_int.angolo  -= 0.05;
+			Aggiorna_Interfaccia();
+	  }
   }
 
 #if 0
@@ -399,12 +429,12 @@ static void GetPosition(void)
 
 static void Aggiorna_Interfaccia(void)
 {
-	test_percentuale+=0.01;
 	/*Disegno il contenuto dei rettangoli.*/
 	disegna_contenuto_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, test_percentuale);
 	//disegna_contenuto_barra_laterale(x_size-d_int.pan_barra_destra-d_int.dim_barra_x, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y,  d_int.spessore_bordo, (1.0-test_percentuale));
-	aggiorna_indicatore_cerchio(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.angolo, (d_int.angolo += 0.1), d_int.raggio_cerchio_centrale, d_int.raggio_indicatore_cerchio);
 
+	aggiorna_indicatore_cerchio(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.angolo_precedente, d_int.angolo, d_int.raggio_cerchio_centrale, d_int.raggio_indicatore_cerchio);
+	d_int.angolo_precedente = d_int.angolo;
 }
 
 
@@ -425,28 +455,22 @@ static void Disegna_Interfaccia(void)
   BSP_LCD_GetYSize(0, &y_size);
 
   //PERSONALE
-  disegna_pulsante_controllo(0,0, d_int.dim_quadrato_piu_meno, d_int.dim_riquadro_etichetta_x, d_int.dim_riquadro_etichetta_y);
+  disegna_pulsante_controllo(pulsante_U);
 
   /*Disegno il cerchio centrale su cui far muovere il pallino.*/
   disegna_cerchio_centrale(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.raggio_cerchio_centrale);
-
-  /*
-  UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_DARKRED);
-  UTIL_LCD_SetFont(&Font8);
-  UTIL_LCD_DisplayStringAt(360, (y_size - 55), (uint8_t *)"Selected Color  Size", LEFT_MODE);
-  */
 
   /*Disegno i due rettangoli laterali, spaziati di un certo spazio calcolato dai bordi laterali e superiori.*/
   disegna_frame_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y);
   disegna_frame_barra_laterale(x_size-d_int.pan_barra_destra-d_int.dim_barra_x,d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y);
 
   /*Disegno il contenuto dei rettangoli.*/
-	test_percentuale+=0.01;
-	disegna_contenuto_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, (1.0-test_percentuale));
-	disegna_contenuto_barra_laterale(x_size-d_int.pan_barra_destra-d_int.dim_barra_x, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, (1.0-test_percentuale));
+  //test_percentuale+=0.01;
+  disegna_contenuto_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, test_percentuale);
+  disegna_contenuto_barra_laterale(x_size-d_int.pan_barra_destra-d_int.dim_barra_x, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, test_percentuale);
 
   /*Disegno l'indicatore del cerchio.*/
-  disegna_indicatore_cerchio(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.angolo, d_int.raggio_cerchio_centrale, d_int.raggio_indicatore_cerchio);
+  aggiorna_indicatore_cerchio(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.angolo_precedente, d_int.angolo, d_int.raggio_cerchio_centrale, d_int.raggio_indicatore_cerchio);
 
 
 #if 0

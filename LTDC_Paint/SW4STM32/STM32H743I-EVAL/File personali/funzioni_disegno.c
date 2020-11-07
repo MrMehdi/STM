@@ -28,6 +28,7 @@ void configura_dimensioni_interfaccia(struttura_d_int * d_int, uint32_t x_size, 
 	/*Variabili relative all'indicatore del cerchio.*/
   (*d_int).raggio_indicatore_cerchio = 5;
   (*d_int).angolo = (2*M_PI)/3;
+  (*d_int).angolo_precedente = (*d_int).angolo;
 
 	/*Variabili relative ai rettangoli laterali.*/
   (*d_int).dim_barra_x = (x_size/8);
@@ -35,11 +36,8 @@ void configura_dimensioni_interfaccia(struttura_d_int * d_int, uint32_t x_size, 
   (*d_int).pan_barra_destra = ((x_size/3)-(*d_int).dim_barra_x)/2;
   (*d_int).pan_barra_alto = (y_size-(*d_int).dim_barra_y)/2;
 
-	/*Variabili relative ai pulsanti di controllo.*/
-  (*d_int).dim_quadrato_piu_meno=(x_size/16);
-  (*d_int).dim_riquadro_etichetta_x=(x_size/8);
-  (*d_int).dim_riquadro_etichetta_y = (*d_int).dim_quadrato_piu_meno;
 }
+
 
 void disegna_cerchio_centrale(uint32_t pos_x, uint32_t pos_y, uint32_t raggio)
 {
@@ -73,17 +71,4 @@ void disegna_contenuto_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t d
 	//TODO: Correggere. verificare per percentuale = 0 e 100
 	UTIL_LCD_FillRect(pos_x, pos_y+dim_y*percentuale, dim_x, dim_y*(1.0-percentuale), COLORE_SFONDO);
 	UTIL_LCD_FillRect(pos_x, pos_y, dim_x, dim_y*percentuale, UTIL_LCD_COLOR_YELLOW);
-}
-
-void disegna_pulsante_controllo(uint32_t pos_x, uint32_t pos_y, uint32_t dim_quadrato, uint32_t dim_riquadro_etichetta_x, uint32_t dim_riquadro_etichetta_y)
-{
-	//TODO: ottimizzare
-/*
-	  UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_DARKRED);
-	  UTIL_LCD_SetFont(&Font20);
-	  UTIL_LCD_DisplayStringAt(pos_x, pos_y, (uint8_t *)"+", LEFT_MODE);
-*/
-	  UTIL_LCD_FillRect(pos_x, pos_y, dim_quadrato, dim_quadrato, UTIL_LCD_COLOR_RED);
-	  UTIL_LCD_FillRect(pos_x+dim_quadrato, pos_y, dim_riquadro_etichetta_x, dim_riquadro_etichetta_y, UTIL_LCD_COLOR_WHITE);
-	  UTIL_LCD_FillRect(pos_x+dim_quadrato+dim_riquadro_etichetta_x, pos_y, dim_quadrato, dim_quadrato, UTIL_LCD_COLOR_BLUE);
 }
