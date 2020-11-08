@@ -27,6 +27,8 @@ typedef struct
 	uint32_t padding_scritta_x;
 	uint32_t padding_scritta_y;
 
+	bool premuto;
+
 	char etichetta[5];
 }struttura_d_pulsanti;
 

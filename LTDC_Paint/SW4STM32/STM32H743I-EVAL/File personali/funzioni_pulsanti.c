@@ -18,22 +18,30 @@ void configura_pulsante(struttura_d_pulsanti *d_pulsanti, uint32_t x_size, uint3
 
 	(*d_pulsanti).padding_scritta_x =  (x_size / 64);
 	(*d_pulsanti).padding_scritta_y =  (*d_pulsanti).padding_scritta_x;
+
+	(*d_pulsanti).premuto = false;
 }
 
 bool verifica_pressione_piu(struttura_d_pulsanti d_pulsanti, uint32_t ts_x, uint32_t ts_y)
 {
-	return ((ts_x > d_pulsanti.pos_x) &
+	//if(d_pulsanti.premuto == false)
+		return ((ts_x > d_pulsanti.pos_x) &
 			(ts_x<(d_pulsanti.pos_x+d_pulsanti.dim_quadrato_piu_meno))&
 			(ts_y > d_pulsanti.pos_y) &
 			(ts_y<(d_pulsanti.pos_y+ d_pulsanti.dim_riquadro_etichetta_y)));
+	//else
+		//return false;
 }
 
 bool verifica_pressione_meno(struttura_d_pulsanti d_pulsanti, uint32_t ts_x, uint32_t ts_y)
 {
-	return ((ts_x > d_pulsanti.pos_x + d_pulsanti.dim_quadrato_piu_meno + d_pulsanti.dim_riquadro_etichetta_x)&
+	//if(d_pulsanti.premuto == false)
+		return ((ts_x > d_pulsanti.pos_x + d_pulsanti.dim_quadrato_piu_meno + d_pulsanti.dim_riquadro_etichetta_x)&
 			(ts_x < (d_pulsanti.pos_x + d_pulsanti.dim_quadrato_piu_meno + 2*(d_pulsanti.dim_riquadro_etichetta_x)))&
 		(ts_y > d_pulsanti.pos_y) &
 		(ts_y<(d_pulsanti.pos_y + d_pulsanti.dim_riquadro_etichetta_y)));
+	//else
+		//return false;
 }
 
 void disegna_pulsante_controllo(struttura_d_pulsanti d_pulsanti)

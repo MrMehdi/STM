@@ -1,4 +1,4 @@
 funzioni_pulsanti.c:7:6:configura_pulsante	0	static
-funzioni_pulsanti.c:23:6:verifica_pressione_piu	8	static
-funzioni_pulsanti.c:31:6:verifica_pressione_meno	12	static
-funzioni_pulsanti.c:39:6:disegna_pulsante_controllo	24	static
+funzioni_pulsanti.c:25:6:verifica_pressione_piu	8	static
+funzioni_pulsanti.c:36:6:verifica_pressione_meno	12	static
+funzioni_pulsanti.c:47:6:disegna_pulsante_controllo	24	static

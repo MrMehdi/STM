@@ -12,7 +12,8 @@
 #define COLORE_SFONDO UTIL_LCD_COLOR_BLACK
 #define COLORE_INTERFACCIA_OK UTIL_LCD_COLOR_GREEN
 #define COLORE_INTERFACCIA_NON_OK UTIL_LCD_COLOR_RED
-
+#define NUMERO_FRAME_ANIMAZIONE 120
+#define DIM_STEP_ANIMAZIONE 0.01
 
 /*Struttura che contiene tutte le informazioni sull'interfaccia, come dimensioni eccetera.*/
 typedef struct
@@ -44,11 +45,12 @@ void configura_dimensioni_interfaccia(struttura_d_int * d_int, uint32_t x_size, 
 
 //Funzioni disegno
 void disegna_cerchio_centrale(uint32_t pos_x, uint32_t pos_y, uint32_t raggio);
-void disegna_indicatore_cerchio(uint32_t pos_x, uint32_t pos_y, double alfa, uint32_t raggio_dal_centro, uint32_t raggio_dimensione_indicatore);
+void disegna_indicatore_cerchio(uint32_t pos_x, uint32_t pos_y, double alfa_prec, double alfa, uint32_t raggio_dal_centro, uint32_t raggio_dimensione_indicatore);
 void disegna_frame_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y);
+void disegna_contenuto_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y, double percentuale);
 
 //Funzioni di aggiornamento
 void aggiorna_indicatore_cerchio(uint32_t pos_x, uint32_t pos_y, double alfa_prec, double alfa, uint32_t raggio_dal_centro, uint32_t raggio_dimensione_indicatore);
-void disegna_contenuto_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y, double percentuale);
+void aggiorna_contenuto_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y, double percentuale_prec, double percentuale);
 
 #endif /*APPLICATION_USER_FUNZIONI_DISEGNO_H_ */

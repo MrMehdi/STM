@@ -76,6 +76,7 @@ MSC_ApplicationTypeDef Appli_state = APPLICATION_IDLE;
 
 
 double test_percentuale = 0.0;
+double test_percentuale_prec = 0.0;
 
 struttura_d_int d_int;
 
@@ -285,15 +286,15 @@ static void GetPosition(void)
   {
 	  if (verifica_pressione_piu(pulsante_U,x ,y))
 	  {
-			test_percentuale+=0.01;
-			d_int.angolo += 0.05;
+			test_percentuale+=0.2;
+			d_int.angolo += 1;
+			//pulsante_U.premuto = true;
 			Aggiorna_Interfaccia();
 	  }
-
-	  if (verifica_pressione_meno(pulsante_U,x ,y))
+	  else if (verifica_pressione_meno(pulsante_U,x ,y))
 	  {
-			test_percentuale -=0.01;
-			d_int.angolo  -= 0.05;
+			test_percentuale -=0.20;
+			d_int.angolo  -= 1;
 			Aggiorna_Interfaccia();
 	  }
   }
@@ -430,11 +431,15 @@ static void GetPosition(void)
 static void Aggiorna_Interfaccia(void)
 {
 	/*Disegno il contenuto dei rettangoli.*/
-	disegna_contenuto_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, test_percentuale);
+	//disegna_contenuto_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, test_percentuale);
 	//disegna_contenuto_barra_laterale(x_size-d_int.pan_barra_destra-d_int.dim_barra_x, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y,  d_int.spessore_bordo, (1.0-test_percentuale));
+	aggiorna_contenuto_barra_laterale(d_int.pan_barra_destra, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, test_percentuale_prec, test_percentuale);
+	test_percentuale_prec = test_percentuale;
 
 	aggiorna_indicatore_cerchio(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.angolo_precedente, d_int.angolo, d_int.raggio_cerchio_centrale, d_int.raggio_indicatore_cerchio);
 	d_int.angolo_precedente = d_int.angolo;
+
+	//pulsante_U.premuto = false;
 }
 
 
@@ -470,7 +475,7 @@ static void Disegna_Interfaccia(void)
   disegna_contenuto_barra_laterale(x_size-d_int.pan_barra_destra-d_int.dim_barra_x, d_int.pan_barra_alto, d_int.dim_barra_x, d_int.dim_barra_y, test_percentuale);
 
   /*Disegno l'indicatore del cerchio.*/
-  aggiorna_indicatore_cerchio(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.angolo_precedente, d_int.angolo, d_int.raggio_cerchio_centrale, d_int.raggio_indicatore_cerchio);
+  disegna_indicatore_cerchio(d_int.centro_x_cerchio_centrale, d_int.centro_y_cerchio_centrale, d_int.angolo_precedente, d_int.angolo, d_int.raggio_cerchio_centrale, d_int.raggio_indicatore_cerchio);
 
 
 #if 0

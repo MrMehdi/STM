@@ -44,12 +44,7 @@ void disegna_cerchio_centrale(uint32_t pos_x, uint32_t pos_y, uint32_t raggio)
 	UTIL_LCD_DrawCircle(pos_x, pos_y, raggio, COLORE_INTERFACCIA_OK);
 }
 
-void disegna_indicatore_cerchio(uint32_t pos_x, uint32_t pos_y, double alfa, uint32_t raggio_dal_centro, uint32_t raggio_dimensione_indicatore)
-{
-	UTIL_LCD_FillCircle(pos_x + raggio_dal_centro* cos(alfa), pos_y + raggio_dal_centro *(-sin(alfa)), raggio_dimensione_indicatore, COLORE_INTERFACCIA_OK);
-}
-
-void aggiorna_indicatore_cerchio(uint32_t pos_x, uint32_t pos_y, double alfa_prec, double alfa, uint32_t raggio_dal_centro, uint32_t raggio_dimensione_indicatore)
+void disegna_indicatore_cerchio(uint32_t pos_x, uint32_t pos_y, double alfa_prec, double alfa, uint32_t raggio_dal_centro, uint32_t raggio_dimensione_indicatore)
 {
 	//Disegno un pallino bianco al posto del pallino precedente
 	UTIL_LCD_FillCircle(pos_x + raggio_dal_centro* cos(alfa_prec), pos_y + raggio_dal_centro *(-sin(alfa_prec)), raggio_dimensione_indicatore, COLORE_SFONDO);
@@ -57,6 +52,19 @@ void aggiorna_indicatore_cerchio(uint32_t pos_x, uint32_t pos_y, double alfa_pre
 	disegna_cerchio_centrale(pos_x, pos_y, raggio_dal_centro);
 	//Disegno il pallino verde nella nuova posizione
 	UTIL_LCD_FillCircle(pos_x + raggio_dal_centro* cos(alfa), pos_y + raggio_dal_centro *(-sin(alfa)), raggio_dimensione_indicatore, COLORE_INTERFACCIA_OK);
+}
+
+void aggiorna_indicatore_cerchio(uint32_t pos_x, uint32_t pos_y, double alfa_prec, double alfa, uint32_t raggio_dal_centro, uint32_t raggio_dimensione_indicatore)
+{
+	int numero_frame = abs((alfa - alfa_prec) / (double) DIM_STEP_ANIMAZIONE);
+	double delta_per_frame = (alfa - alfa_prec) / (double)numero_frame;
+
+	for(int i = 0; i < numero_frame; i ++)
+	{
+		disegna_indicatore_cerchio(pos_x, pos_y, alfa_prec + i*delta_per_frame, alfa_prec + (i+1)*delta_per_frame, raggio_dal_centro, raggio_dimensione_indicatore);
+		HAL_Delay(1);
+	}
+
 }
 
 void disegna_frame_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y)
@@ -68,7 +76,19 @@ void disegna_frame_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x
 
 void disegna_contenuto_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y, double percentuale)
 {
-	//TODO: Correggere. verificare per percentuale = 0 e 100
 	UTIL_LCD_FillRect(pos_x, pos_y+dim_y*percentuale, dim_x, dim_y*(1.0-percentuale), COLORE_SFONDO);
 	UTIL_LCD_FillRect(pos_x, pos_y, dim_x, dim_y*percentuale, UTIL_LCD_COLOR_YELLOW);
+}
+
+
+void aggiorna_contenuto_barra_laterale(uint32_t pos_x, uint32_t pos_y, uint32_t dim_x, uint32_t dim_y, double percentuale_prec, double percentuale)
+{
+	int numero_frame = abs((percentuale - percentuale_prec) / (double) DIM_STEP_ANIMAZIONE);
+	double delta_per_frame = (percentuale - percentuale_prec) / (double)numero_frame;
+
+	for(int i = 0; i < numero_frame; i ++)
+	{
+		disegna_contenuto_barra_laterale(pos_x, pos_y, dim_x, dim_y, i*delta_per_frame);
+		HAL_Delay(1);
+	}
 }

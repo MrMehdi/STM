@@ -49,6 +49,7 @@
 "Drivers/STM32H7xx_HAL_Driver/stm32h7xx_ll_usb.o"
 "File personali/funzioni_disegno.o"
 "File personali/funzioni_pulsanti.o"
+"File personali/funzioni_slider.o"
 "Middlewares/FatFs/Core/diskio.o"
 "Middlewares/FatFs/Core/ff.o"
 "Middlewares/FatFs/Core/ff_gen_drv.o"
